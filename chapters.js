@@ -3,25 +3,30 @@
 // _Working example: [1.html](../1.html)._
 // _[Go to Example 2](2.html)_
 
-// Self-executing wrapper
 (function($){
-  // **ListView class**: Our main app view.
   var ListView = Backbone.View.extend({
-    el: $('body'), // attaches `this.el` to an existing element.
-    // `initialize()`: Automatically called upon instantiation.
-    // Where you make all types of bindings, _excluding_ UI events, such as clicks, etc.
-    initialize: function(){
-      _.bindAll(this, 'render'); // fixes loss of context for 'this' within methods
-
-       this.render(); // not all views are self-rendering. This one is.
+    el: $('body'), // el attaches to existing element
+    // `events`: Where DOM events are bound to View methods. Backbone doesn't have a separate controller to handle such bindings; it all happens in a View.
+    events: {
+      'click button#add': 'addItem'
     },
-    // `render()`: Function in charge of rendering the entire view in `this.el`.
-    // Needs to be manually called by the user.
+    initialize: function(){
+      _.bindAll(this, 'render', 'addItem'); // every function that uses 'this' as the current object should be in here
+
+      this.counter = 0; // total number of items added thus far
+      this.render();
+    },
+    // `render()` now introduces a button to add a new list item.
     render: function(){
-      $(this.el).append("<ul> <li>hello world</li> </ul>");
+      $(this.el).append("<button id='add'>Add list item</button>");
+      $(this.el).append("<ul></ul>");
+    },
+    // `addItem()`: Custom function called via `click` event above.
+    addItem: function(){
+      this.counter++;
+      $('ul', this.el).append("<li>hello world"+this.counter+"</li>");
     }
   });
 
-  // **listView instance**: Instantiate main app view.
   var listView = new ListView();
 })(jQuery);
