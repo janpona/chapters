@@ -4,20 +4,20 @@
     success();
   }
 
-  var Item = Backbone.Model.extend({
+  var Word = Backbone.Model.extend({
     defaults: {
       part1: 'hello',
-      part2: 'world'
+      part2: 'word'
     }
   });
 
   var List = Backbone.Collection.extend({
-    model: Item
+    model: Word
   });
 
-  var ItemView = Backbone.View.extend({
+  var WordView = Backbone.View.extend({
     tagName: 'li', // name of tag to be created
-    // `ItemView`s now respond to two clickable actions for each `Item`: swap and delete.
+    // `WordView`s now respond to two clickable actions for each `Word`: swap and delete.
     events: {
       'click span.swap':  'swap',
       'click span.delete': 'remove'
@@ -38,7 +38,7 @@
     unrender: function(){
       $(this.el).remove();
     },
-    // `swap()` will interchange an `Item`'s attributes. When the `.set()` model function is called, the event `change` will be triggered.
+    // `swap()` will interchange an `Word`'s attributes. When the `.set()` model function is called, the event `change` will be triggered.
     swap: function(){
       var swapped = {
         part1: this.model.get('part2'),
@@ -52,42 +52,42 @@
     }
   });
 
-  // Because the new features (swap and delete) are intrinsic to each `Item`, there is no need to modify `ListView`.
+  // Because the new features (swap and delete) are intrinsic to each `Word`, there is no need to modify `ListView`.
   var ListView = Backbone.View.extend({
     el: $('body'), // el attaches to existing element
     events: {
-      'click button#add': 'addItem'
+      'click button#add': 'addWord'
     },
     initialize: function(){
-      _.bindAll(this, 'render', 'addItem', 'appendItem'); // every function that uses 'this' as the current object should be in here
+      _.bindAll(this, 'render', 'addWord', 'appendWord'); // every function that uses 'this' as the current object should be in here
 
       this.collection = new List();
-      this.collection.bind('add', this.appendItem); // collection event binder
+      this.collection.bind('add', this.appendWord); // collection event binder
 
       this.counter = 0;
       this.render();
     },
     render: function(){
       var self = this;
-      $(this.el).append("<button id='add'>Add list item</button>");
+      $(this.el).append("<button id='add'>Add list Word</button>");
       $(this.el).append("<ul></ul>");
-      _(this.collection.models).each(function(item){ // in case collection is not empty
-        self.appendItem(item);
+      _(this.collection.models).each(function(Word){ // in case collection is not empty
+        self.appendWord(Word);
       }, this);
     },
-    addItem: function(){
+    addWord: function(){
       this.counter++;
-      var item = new Item();
-      item.set({
-        part2: item.get('part2') + this.counter // modify item defaults
+      var Word = new Word();
+      Word.set({
+        part2: Word.get('part2') + this.counter // modify Word defaults
       });
-      this.collection.add(item);
+      this.collection.add(Word);
     },
-    appendItem: function(item){
-      var itemView = new ItemView({
-        model: item
+    appendWord: function(Word){
+      var WordView = new WordView({
+        model: Word
       });
-      $('ul', this.el).append(itemView.render().el);
+      $('ul', this.el).append(WordView.render().el);
     }
   });
 
