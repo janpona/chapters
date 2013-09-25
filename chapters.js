@@ -69,25 +69,25 @@
     },
     render: function(){
       var self = this;
-      $(this.el).append("<button id='add'>Add list Word</button>");
+      $(this.el).append("<button id='add'>Next word</button>");
       $(this.el).append("<ul></ul>");
-      _(this.collection.models).each(function(Word){ // in case collection is not empty
-        self.appendWord(Word);
+      _(this.collection.models).each(function(word){ // in case collection is not empty
+        self.appendWord(word);
       }, this);
     },
     addWord: function(){
       this.counter++;
-      var Word = new Word();
-      Word.set({
-        part2: Word.get('part2') + this.counter // modify Word defaults
+      var word = new Word();
+      word.set({
+        part2: word.get('part2') + this.counter // modify word defaults
       });
-      this.collection.add(Word);
+      this.collection.add(word);
     },
-    appendWord: function(Word){
-      var WordView = new WordView({
-        model: Word
+    appendWord: function(word){
+      var wordView = new WordView({
+        model: word
       });
-      $('ul', this.el).append(WordView.render().el);
+      $('ul', this.el).append(wordView.render().el);
     }
   });
 
